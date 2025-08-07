@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE `usuarios` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `nome` VARCHAR(100) NULL DEFAULT '',
+    `nome` VARCHAR(100) NULL,
     `login` VARCHAR(100) NOT NULL,
     `senha` VARCHAR(255) NOT NULL,
     `criado_em` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -14,7 +14,7 @@ CREATE TABLE `usuarios` (
 -- CreateTable
 CREATE TABLE `categorias` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `nome` VARCHAR(100) NULL DEFAULT '',
+    `nome` VARCHAR(100) NULL,
     `criado_em` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `alterado_em` DATETIME(3) NOT NULL,
 
@@ -27,7 +27,7 @@ CREATE TABLE `receitas` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `id_usuarios` INTEGER NOT NULL,
     `id_categorias` INTEGER NULL,
-    `nome` VARCHAR(100) NULL DEFAULT '',
+    `nome` VARCHAR(100) NULL,
     `tempo_preparo_minutos` INTEGER NULL,
     `porcoes` INTEGER NULL DEFAULT 1,
     `modo_preparo` TEXT NOT NULL,
