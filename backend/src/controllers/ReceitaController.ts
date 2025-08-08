@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
-import { servicoUsuario } from "../services/ServicoUsuario";
-import { IUsuario } from "../Interfaces/IUsuario";
 import HttpErro from "../errors/HttpErros";
 import { servicoReceita } from "../services/ServicoReceita";
 import { IReceita } from "../Interfaces/IReceita";
+import { IPaginacao } from "../Interfaces/IPaginacao";
 
 class ReceitaController {
   async listarReceitas(req: Request, res: Response): Promise<void> {
     try {
-      const receitas = await servicoReceita.listarReceitas();
-      res.status(200).json({ status: "sucesso", dados: receitas });
+      const paginacao: IPaginacao = {
+        pagina: parseInt(String(req.query.pagina)) || 1,
+        limite: parseInt(String(req.query.limite)) || 10,
+      };
+      const receitas = await servicoReceita.listarReceitas(paginacao);
+      res.status(200).json({ status: "sucesso", ...receitas });
       return;
     } catch (error) {
       console.error(":C - Erro ao recuperar receitas.", error);

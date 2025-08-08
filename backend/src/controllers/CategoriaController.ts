@@ -1,11 +1,17 @@
 import { Request, Response } from "express";
 import { servicoCategoria } from "../services/ServicoCategoria";
+import { IPaginacao } from "../Interfaces/IPaginacao";
 
 class CategoriaController {
   async listarCategorias(req: Request, res: Response): Promise<void> {
     try {
-      const categorias = await servicoCategoria.listarCategorias();
-      res.status(200).json({ status: "sucesso", dados: categorias });
+      const paginacao: IPaginacao = {
+        pagina: parseInt(String(req.query.pagina)) || 1,
+        limite: parseInt(String(req.query.limite)) || 10,
+      };
+
+      const categorias = await servicoCategoria.listarCategorias(paginacao);
+      res.status(200).json({ status: "sucesso", ...categorias });
       return;
     } catch (error) {
       console.error(":C - Erro ao recuperar categorias.", error);
