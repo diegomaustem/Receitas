@@ -159,6 +159,14 @@ class UsuarioController {
         dados: usuarioExcluido,
       });
     } catch (error) {
+      if (error instanceof HttpErro) {
+        res.status(error.statusCode).json({
+          status: "erro",
+          mensagem: error.mensagem,
+        });
+        return;
+      }
+
       console.error(":C - Erro ao excluir usuário.", error);
       res.status(500).json({
         status: "erro",
