@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, Request, Response } from "express";
 import rotas from "../routes/rotas";
 import dotenv from "dotenv";
 
@@ -12,6 +12,7 @@ class Servidor {
     this.porta = process.env.PORTA || 3003;
     this.middlewares();
     this.rotas();
+    this.tratarRotaInexistente();
   }
 
   private middlewares(): void {
@@ -20,6 +21,16 @@ class Servidor {
 
   private rotas(): void {
     this.servidor.use("/api", rotas);
+  }
+
+  private tratarRotaInexistente(): void {
+    this.servidor.use((req: Request, res: Response) => {
+      res.status(404).json({
+        error: "erro",
+        mensagem: "Rota não encontrada. Verifique o caminho e tente novamente.",
+      });
+      return;
+    });
   }
 
   public iniciaServidor(): void {
