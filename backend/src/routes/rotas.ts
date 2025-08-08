@@ -10,6 +10,7 @@ import {
   schemaAtualizacaoReceita,
   schemaCriacaoReceita,
 } from "../validations/ValidacaoReceita";
+import { categoriaController } from "../controllers/CategoriaController";
 const rotas = Router();
 
 // Usuários
@@ -41,5 +42,9 @@ rotas.patch(
   receitaController.atualizarReceita
 );
 rotas.delete("/receita/:id", receitaController.excluirReceita);
+
+// Categorias
+rotas.get("/categorias", categoriaController.listarCategorias);
+rotas.get("/categoria/:id", categoriaController.listarCategoria);
 
 export default rotas;
