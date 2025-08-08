@@ -1,5 +1,5 @@
 import prisma from "../lib/prismaClient";
-import { ModeloTabelas } from "../Types/ModeloTabelas";
+import { ModeloTabelas } from "../types/ModeloTabelas";
 
 class RepositorioGenerico {
   async queryGenerica(
