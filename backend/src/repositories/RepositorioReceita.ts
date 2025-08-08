@@ -1,10 +1,35 @@
+import { IPaginacao } from "../Interfaces/IPaginacao";
 import { IReceita } from "../Interfaces/IReceita";
+import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 import prisma from "../lib/prismaClient";
 
 class RepositorioReceita {
-  async listarReceitas(): Promise<IReceita[]> {
+  async listarReceitas(
+    paginacao: IPaginacao
+  ): Promise<IResultadoPaginado<IReceita>> {
+    const { pagina, limite } = paginacao;
     try {
-      return await prisma.receita.findMany();
+      const skip = (pagina - 1) * limite;
+
+      const [dados, total] = await Promise.all([
+        prisma.receita.findMany({
+          skip,
+          take: limite,
+        }),
+        prisma.receita.count(),
+      ]);
+
+      const totalPaginas = Math.ceil(total / limite);
+
+      return {
+        dados,
+        paginacao: {
+          total,
+          pagina,
+          limite,
+          totalPaginas,
+        },
+      };
     } catch (error) {
       console.error(":R - Erro ao buscar receitas.", error);
       throw error;
