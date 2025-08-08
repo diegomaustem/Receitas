@@ -2,12 +2,17 @@ import { Request, Response } from "express";
 import { servicoUsuario } from "../services/ServicoUsuario";
 import { IUsuario } from "../Interfaces/IUsuario";
 import HttpErro from "../errors/HttpErros";
+import { IPaginacao } from "../Interfaces/IPaginacao";
 
 class UsuarioController {
   async listarUsuarios(req: Request, res: Response): Promise<void> {
     try {
-      const usuarios = await servicoUsuario.listarUsuarios();
-      res.status(200).json({ status: "sucesso", dados: usuarios });
+      const paginacao: IPaginacao = {
+        pagina: parseInt(String(req.query.pagina)) || 1,
+        limite: parseInt(String(req.query.limite)) || 10,
+      };
+      const usuarios = await servicoUsuario.listarUsuarios(paginacao);
+      res.status(200).json({ status: "sucesso", ...usuarios });
       return;
     } catch (error) {
       console.error(":C - Erro ao recuperar usuários.", error);

@@ -3,11 +3,15 @@ import { utilsSenha } from "../utils/UtilsSenha";
 import { repositorioGenerico } from "../repositories/RepositorioGenerico";
 import RepositorioUsuario from "../repositories/RepositorioUsuario";
 import HttpErro from "../errors/HttpErros";
+import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
+import { IPaginacao } from "../Interfaces/IPaginacao";
 
 class ServicoUsuario {
-  async listarUsuarios(): Promise<IUsuario[]> {
+  async listarUsuarios(
+    paginacao: IPaginacao
+  ): Promise<IResultadoPaginado<IUsuario>> {
     try {
-      return await RepositorioUsuario.listarUsuarios();
+      return await RepositorioUsuario.listarUsuarios(paginacao);
     } catch (error) {
       console.error(":S - Falha ao recuperar usuários.", error);
       throw error;
