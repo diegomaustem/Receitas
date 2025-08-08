@@ -19,7 +19,7 @@ async function main() {
   ];
 
   const categoriasUpsert = categorias.map((categoria) =>
-    prisma.categorias.upsert({
+    prisma.categoria.upsert({
       where: { nome: categoria },
       update: {},
       create: { nome: categoria },
