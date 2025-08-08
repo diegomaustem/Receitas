@@ -2,11 +2,15 @@ import { repositorioGenerico } from "../repositories/RepositorioGenerico";
 import RepositorioReceita from "../repositories/RepositorioReceita";
 import { IReceita } from "../Interfaces/IReceita";
 import HttpErro from "../errors/HttpErros";
+import { IPaginacao } from "../Interfaces/IPaginacao";
+import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 
 class ServicoReceita {
-  async listarReceitas(): Promise<IReceita[]> {
+  async listarReceitas(
+    paginacao: IPaginacao
+  ): Promise<IResultadoPaginado<IReceita>> {
     try {
-      return await RepositorioReceita.listarReceitas();
+      return await RepositorioReceita.listarReceitas(paginacao);
     } catch (error) {
       console.error(":S - Falha ao recuperar receitas.", error);
       throw error;
