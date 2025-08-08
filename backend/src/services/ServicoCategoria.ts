@@ -1,10 +1,14 @@
 import { ICategoria } from "../Interfaces/ICategoria";
+import { IPaginacao } from "../Interfaces/IPaginacao";
+import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 import RepositorioCategoria from "../repositories/RepositorioCategoria";
 
 class ServicoCategoria {
-  async listarCategorias(): Promise<ICategoria[]> {
+  async listarCategorias(
+    paginacao: IPaginacao
+  ): Promise<IResultadoPaginado<ICategoria>> {
     try {
-      return await RepositorioCategoria.listarCategorias();
+      return await RepositorioCategoria.listarCategorias(paginacao);
     } catch (error) {
       console.error(":S - Falha ao recuperar categorias.", error);
       throw error;
