@@ -2,7 +2,6 @@ import { IPaginacao } from "../Interfaces/IPaginacao";
 import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 import { IUsuario } from "../Interfaces/IUsuario";
 import prisma from "../lib/prismaClient";
-
 class RepositorioUsuario {
   async listarUsuarios(
     paginacao: IPaginacao
@@ -80,6 +79,21 @@ class RepositorioUsuario {
       });
     } catch (error) {
       console.error(":R - Erro ao excluir usuário.", error);
+      throw error;
+    }
+  }
+
+  async obterUsuarioExistente(login: string): Promise<IUsuario | null> {
+    try {
+      return await prisma.usuario.findFirst({
+        where: {
+          login: {
+            contains: login,
+          },
+        },
+      });
+    } catch (error) {
+      console.error(":R - Erro ao verificar login de usuário.", error);
       throw error;
     }
   }
