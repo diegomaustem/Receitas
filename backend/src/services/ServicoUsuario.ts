@@ -5,6 +5,7 @@ import RepositorioUsuario from "../repositories/RepositorioUsuario";
 import HttpErro from "../errors/HttpErros";
 import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 import { IPaginacao } from "../Interfaces/IPaginacao";
+import { ILoginUsuario } from "../Interfaces/ILoginUsuario";
 
 class ServicoUsuario {
   async listarUsuarios(
@@ -103,6 +104,20 @@ class ServicoUsuario {
       }
     } catch (error) {
       console.error(":S - Falha ao validar regras do usuário.", error);
+      throw error;
+    }
+  }
+
+  async obterUsuarioExistente(loginUsuario: ILoginUsuario): Promise<IUsuario> {
+    const { login } = loginUsuario;
+    try {
+      const usuario = await RepositorioUsuario.obterUsuarioExistente(login);
+      if (!usuario) {
+        throw new HttpErro("Usuário não encontrado em nossos registros.", 404);
+      }
+      return usuario;
+    } catch (error) {
+      console.error(":S - Falha ao buscar por login de usuário.", error);
       throw error;
     }
   }
