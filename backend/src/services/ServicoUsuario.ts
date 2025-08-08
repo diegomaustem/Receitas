@@ -68,8 +68,8 @@ class ServicoUsuario {
     dadosUsuario?: IUsuario,
     idUsuario?: number
   ): Promise<void> {
-    if (idUsuario) {
-      try {
+    try {
+      if (idUsuario) {
         const usuarioTemReceita = await repositorioGenerico.queryGenerica(
           "receita",
           "idUsuarios",
@@ -82,30 +82,24 @@ class ServicoUsuario {
           );
         }
         return;
-      } catch (error) {
-        console.error(":S - Falha ao validar regra receita do usuário.", error);
-        throw error;
       }
-    }
-    if (dadosUsuario?.login) {
-      try {
+      if (dadosUsuario?.login) {
         const { login } = dadosUsuario;
         const loginEmUso = await repositorioGenerico.queryGenerica(
           "usuario",
           "login",
           login
         );
-
         if (loginEmUso) {
           throw new HttpErro(
-            "O login informado já está em uso. Tente outro.",
+            "O login fornecido já está em uso. Por favor, escolha outro.",
             409
           );
         }
-      } catch (error) {
-        console.error(":S - Falha ao validar regra login do usuário.", error);
-        throw error;
       }
+    } catch (error) {
+      console.error(":S - Falha ao validar regras do usuário.", error);
+      throw error;
     }
   }
 }
