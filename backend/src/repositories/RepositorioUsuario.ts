@@ -1,10 +1,35 @@
+import { IPaginacao } from "../Interfaces/IPaginacao";
+import { IResultadoPaginado } from "../Interfaces/IResultadoPaginado";
 import { IUsuario } from "../Interfaces/IUsuario";
 import prisma from "../lib/prismaClient";
 
 class RepositorioUsuario {
-  async listarUsuarios(): Promise<IUsuario[]> {
+  async listarUsuarios(
+    paginacao: IPaginacao
+  ): Promise<IResultadoPaginado<IUsuario>> {
+    const { pagina, limite } = paginacao;
     try {
-      return await prisma.usuario.findMany();
+      const skip = (pagina - 1) * limite;
+
+      const [dados, total] = await Promise.all([
+        prisma.usuario.findMany({
+          skip,
+          take: limite,
+        }),
+        prisma.usuario.count(),
+      ]);
+
+      const totalPaginas = Math.ceil(total / limite);
+
+      return {
+        dados,
+        paginacao: {
+          total,
+          pagina,
+          limite,
+          totalPaginas,
+        },
+      };
     } catch (error) {
       console.error(":R - Erro ao buscar usuários.", error);
       throw error;
